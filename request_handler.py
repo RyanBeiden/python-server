@@ -1,8 +1,29 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from animals import get_all_animals
+from animals import get_all_animals, get_single_animal
+from locations import get_all_locations, get_single_location
+from employees import get_all_employees, get_single_employee
+from customers import get_all_customers, get_single_customer
 
 # Here's a class. It inherits from another class.
 class HandleRequests(BaseHTTPRequestHandler):
+    def parse_url(self, path):
+        # Just like splitting a string in JavaScript. If the
+        # path is "/animals/1", the resulting list will
+        # have "" at index 0, "animals" at index 1, and "1"
+        # at index 2.
+        path_params = path.split("/")
+        resource = path_params[1]
+        id = None
+
+        # Try to get the item at index 2
+        try:
+            id = int(path_params[2])
+        except IndexError:
+            pass  # No route parameter exists: /animals
+        except ValueError:
+            pass  # Request had trailing slash: /animals/
+
+        return (resource, id)  # This is a tuple
 
     # Here's a class function
     def _set_headers(self, status):
@@ -20,9 +41,33 @@ class HandleRequests(BaseHTTPRequestHandler):
         # Your new console.log() that outputs to the terminal
         print(self.path)
 
+        # Parse the URL and capture the tuple that is returned
+        (resource, id) = self.parse_url(self.path)
+
         # It's an if..else statement
-        if self.path == "/animals":
-            response = get_all_animals()
+        if resource == "animals":
+            if id is not None:
+                response = f"{get_single_animal(id)}"
+            else:
+                response = f"{get_all_animals()}"
+
+        elif resource == "locations":
+            if id is not None:
+                response = f"{get_single_location(id)}"
+            else:
+                response = f"{get_all_locations()}"
+
+        elif resource == "employees":
+            if id is not None:
+                response = f"{get_single_employee(id)}"
+            else:
+                response = f"{get_all_employees()}"
+
+        elif resource == "customers":
+            if id is not None:
+                response = f"{get_single_customer(id)}"
+            else:
+                response = f"{get_all_customers()}"
         else:
             response = []
 
