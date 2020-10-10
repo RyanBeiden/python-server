@@ -1,8 +1,9 @@
+import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from animals import get_all_animals, get_single_animal
-from locations import get_all_locations, get_single_location
-from employees import get_all_employees, get_single_employee
-from customers import get_all_customers, get_single_customer
+from animals import get_all_animals, get_single_animal, create_animal
+from locations import get_all_locations, get_single_location, create_location
+from employees import get_all_employees, get_single_employee, create_employee
+from customers import get_all_customers, get_single_customer, create_customer
 
 # Here's a class. It inherits from another class.
 class HandleRequests(BaseHTTPRequestHandler):
@@ -77,19 +78,34 @@ class HandleRequests(BaseHTTPRequestHandler):
     # Here's a method on the class that overrides the parent's method.
     # It handles any POST request.
     def do_POST(self):
-        # Set response code to 'Created'
         self._set_headers(201)
-
         content_len = int(self.headers.get('content-length', 0))
         post_body = self.rfile.read(content_len)
-        response = f"received post request:<br>{post_body}"
-        self.wfile.write(response.encode())
+
+        # Convert JSON string to a Python dictionary
+        post_body = json.loads(post_body)
+
+        # Parse the URL
+        (resource, id) = self.parse_url(self.path)
+
+        # Initialize new object
+        new_object = None
 
 
-    # Here's a method on the class that overrides the parent's method.
-    # It handles any PUT request.
-    def do_PUT(self):
-        self.do_POST()
+        # Add a new animal to the list. Don't worry about
+        # the orange squiggle, you'll define the create_animal
+        # function next.
+        if resource == "animals":
+            new_object = create_animal(post_body)
+        elif resource == "locations":
+            new_object = create_location(post_body)
+        elif resource == "employees":
+            new_object = create_employee(post_body)
+        elif resource == "customers":
+            new_object = create_customer(post_body)
+        
+        # Encode the new animal and send in response
+        self.wfile.write(f"{new_object}".encode())
 
 
 # This function is not inside the class. It is the starting
