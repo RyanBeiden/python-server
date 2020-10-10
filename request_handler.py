@@ -1,9 +1,9 @@
 import json
-from http.server import BaseHTTPRequestHandler, HTTPServer
-from animals import get_all_animals, get_single_animal, create_animal, delete_animal, update_animal
-from locations import get_all_locations, get_single_location, create_location, delete_location, update_location
-from employees import get_all_employees, get_single_employee, create_employee, delete_employee, update_employee
 from customers import get_all_customers, get_single_customer, create_customer, delete_customer, update_customer
+from employees import get_all_employees, get_single_employee, create_employee, delete_employee, update_employee
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from locations import get_single_location, get_all_locations, create_location, delete_location, update_location
+from animals import get_all_animals, get_single_animal, create_animal, delete_animal, update_animal, update_animal
 
 # Here's a class. It inherits from another class.
 class HandleRequests(BaseHTTPRequestHandler):
@@ -155,3 +155,6 @@ def main():
     host = ''
     port = 8088
     HTTPServer((host, port), HandleRequests).serve_forever()
+
+if __name__ == "__main__":
+    main()
