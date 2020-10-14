@@ -1,5 +1,6 @@
 class Location():
 
-  def __init__(self, id, city):
+  def __init__(self, id, name, address):
     self.id = id
-    self.city = city
+    self.name = name
+    self.address = address
