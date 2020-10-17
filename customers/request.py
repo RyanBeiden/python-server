@@ -1,3 +1,4 @@
+from sqlite3.dbapi2 import Cursor
 from models.customer import Customer
 import sqlite3
 import json
@@ -62,14 +63,13 @@ def create_customer(customer):
     return customer
 
 def delete_customer(id):
-    customer_index = -1
+    with sqlite3.connect("./kennel.db") as conn:
+        db_cursor = conn.cursor()
 
-    for index, customer in enumerate(CUSTOMERS):
-        if customer.id == id:
-            customer_index = index
-
-    if customer_index >= 0:
-        CUSTOMERS.pop(customer_index)
+        db_cursor.execute("""
+        DELETE FROM customer
+        WHERE id = ?
+        """, (id, ))
 
 def update_customer(id, new_customer):
     for index, customer in enumerate(CUSTOMERS):
