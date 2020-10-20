@@ -69,10 +69,24 @@ def delete_employee(id):
         """, (id, ))
 
 def update_employee(id, new_employee):
-    for index, employee in enumerate(EMPLOYEES):
-        if employee.id == id:
-            EMPLOYEES[index] = new_employee
-            break
+    with sqlite3.connect("./kennel.db") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        UPDATE employee
+            SET
+                name = ?,
+                address = ?,
+                location_id = ?
+        WHERE id = ?
+        """, (new_employee["name"], new_employee["address"], new_employee["location_id"], id ))
+
+        rows_affected = db_cursor.rowcount
+
+    if rows_affected == 0:
+        return False
+    else:
+        return True
 
 def get_employees_by_location(location_id):
     with sqlite3.connect("./kennel.db") as conn:
