@@ -1,9 +1,10 @@
 from models.location import Location
+
 import sqlite3
 import json
 
 def get_all_locations():
-    with sqlite3.connect("./kennel.db") as conn:
+    with sqlite3.connect('./kennel.db') as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
@@ -26,7 +27,7 @@ def get_all_locations():
     return json.dumps(locations)
 
 def get_single_location(id):
-    with sqlite3.connect("./kennel.db") as conn:
+    with sqlite3.connect('./kennel.db') as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
@@ -41,21 +42,15 @@ def get_single_location(id):
 
         data = db_cursor.fetchone()
 
-        location = Location(data["id"], data["name"], data["address"])
+        location = Location(data['id'], data['name'], data['address'])
 
         return json.dumps(location.__dict__)
 
 def create_location(location):
-    max_id = LOCATIONS[-1].id
-    new_id = max_id + 1
-
-    location["id"] = new_id
-    new_location = Location(location['id'], location['city'])
-    LOCATIONS.append(new_location)
-    return location
+    pass
 
 def delete_location(id):
-    with sqlite3.connect("./kennel.db") as conn:
+    with sqlite3.connect('./kennel.db') as conn:
         db_cursor = conn.cursor()
 
         db_cursor.execute("""
@@ -64,7 +59,7 @@ def delete_location(id):
         """, (id, ))
 
 def update_location(id, new_location):
-    with sqlite3.connect("./kennel.db") as conn:
+    with sqlite3.connect('./kennel.db') as conn:
         db_cursor = conn.cursor()
 
         db_cursor.execute("""
@@ -73,7 +68,7 @@ def update_location(id, new_location):
                 name = ?,
                 address = ?
         WHERE id = ?
-        """, (new_location["name"], new_location["address"], id ))
+        """, (new_location['name'], new_location['address'], id ))
 
         rows_affected = db_cursor.rowcount
 

@@ -7,7 +7,7 @@ import json
 
 def get_all_animals():
     # Open a connection to the database
-    with sqlite3.connect("./kennel.db") as conn:
+    with sqlite3.connect('./kennel.db') as conn:
 
         # Just use these. It's a Black Box.
         conn.row_factory = sqlite3.Row
@@ -66,7 +66,7 @@ def get_all_animals():
 
 # Function with a single parameter
 def get_single_animal(id):
-    with sqlite3.connect("./kennel.db") as conn:
+    with sqlite3.connect('./kennel.db') as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
@@ -111,7 +111,7 @@ def get_single_animal(id):
     return json.dumps(animal.__dict__)
 
 def create_animal(new_animal):
-    with sqlite3.connect("./kennel.db") as conn:
+    with sqlite3.connect('./kennel.db') as conn:
         db_cursor = conn.cursor()
 
         db_cursor.execute("""
@@ -119,7 +119,7 @@ def create_animal(new_animal):
             ( name, breed, treatment, locationId, customerId )
         VALUES
             ( ?, ?, ?, ?, ? );
-        """, (new_animal["name"], new_animal["breed"], new_animal["treatment"], new_animal["locationId"], new_animal["customerId"], ))
+        """, (new_animal['name'], new_animal['breed'], new_animal['treatment'], new_animal['locationId'], new_animal['customerId'], ))
 
         # The `lastrowid` property on the cursor will return
         # the primary key of the last thing that got added to
@@ -129,12 +129,12 @@ def create_animal(new_animal):
         # Add the `id` property to the animal dictionary that
         # was sent by the client so that the client sees the
         # primary key in the response.
-        new_animal["id"] = id
+        new_animal['id'] = id
 
     return json.dumps(new_animal)
 
 def delete_animal(id):
-    with sqlite3.connect("./kennel.db") as conn:
+    with sqlite3.connect('./kennel.db') as conn:
         db_cursor = conn.cursor()
 
         db_cursor.execute("""
@@ -143,7 +143,7 @@ def delete_animal(id):
         """, (id, ))
 
 def update_animal(id, new_animal):
-    with sqlite3.connect("./kennel.db") as conn:
+    with sqlite3.connect('./kennel.db') as conn:
         db_cursor = conn.cursor()
 
         db_cursor.execute("""
@@ -155,9 +155,9 @@ def update_animal(id, new_animal):
                 locationId = ?,
                 customerId = ?
         WHERE id = ?
-        """, (new_animal["name"], new_animal["breed"],
-            new_animal["treatment"], new_animal["locationId"],
-            new_animal["customerId"], id, ))
+        """, (new_animal['name'], new_animal['breed'],
+            new_animal['treatment'], new_animal['locationId'],
+            new_animal['customerId'], id, ))
 
         # Were any rows affected?
         # Did the client send an `id` that exists?
@@ -171,7 +171,7 @@ def update_animal(id, new_animal):
         return True
 
 def get_animals_by_location(locationId):
-    with sqlite3.connect("./kennel.db") as conn:
+    with sqlite3.connect('./kennel.db') as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
@@ -191,15 +191,15 @@ def get_animals_by_location(locationId):
         dataset = db_cursor.fetchall()
 
         for row in dataset:
-            animal = Animal(row["id"], row["name"], row["breed"],
-                            row["treatment"], row["locationId"],
-                            row["customerId"])
+            animal = Animal(row['id'], row['name'], row['breed'],
+                            row['treatment'], row['locationId'],
+                            row['customerId'])
             animals.append(animal.__dict__)
     
     return json.dumps(animals)
 
 def get_animals_by_treatment(treatment):
-    with sqlite3.connect("./kennel.db") as conn:
+    with sqlite3.connect('./kennel.db') as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
@@ -219,9 +219,9 @@ def get_animals_by_treatment(treatment):
         dataset = db_cursor.fetchall()
 
         for row in dataset:
-            animal = Animal(row["id"], row["name"], row["breed"],
-                            row["treatment"], row["locationId"],
-                            row["customerId"])
+            animal = Animal(row['id'], row['name'], row['breed'],
+                            row['treatment'], row['locationId'],
+                            row['customerId'])
             animals.append(animal.__dict__)
     
     return json.dumps(animals)
