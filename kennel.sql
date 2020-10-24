@@ -1,19 +1,23 @@
-SELECT
-    a.id,
-    a.name,
-    a.breed,
-    a.treatment,
-    a.customerId,
-    a.locationId,
-    l.name location_name,
-    l.address location_address,
-    c.name customer_name,
-    c.address customer_address,
-    c.email customer_email,
-    c.password customer_password
-FROM Animal a
-JOIN Location l
-    ON l.id = a.locationId
-JOIN Customer c
-    ON c.id = a.customerId
-WHERE a.id = 2;
+PRAGMA foreign_keys=off;
+
+BEGIN TRANSACTION;
+
+DROP TABLE Employee;
+
+CREATE TABLE `Employee` (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`name`	TEXT NOT NULL,
+	`location_id` INTEGER NOT NULL,
+	FOREIGN KEY(`location_id`) REFERENCES `Location`(`id`)
+
+);
+
+INSERT INTO `Employee` VALUES (null, "Madi Peper", 1);
+INSERT INTO `Employee` VALUES (null, "Kristen Norris", 1);
+INSERT INTO `Employee` VALUES (null, "Meg Ducharme", 2);
+INSERT INTO `Employee` VALUES (null, "Hannah Hall", 1);
+INSERT INTO `Employee` VALUES (null, "Leah Hoefling", 2);
+
+COMMIT;
+
+PRAGMA foreign_keys=on;
